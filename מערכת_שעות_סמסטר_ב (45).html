@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מערכת שעות סמסטר ב׳ תשפ״ו | מוסררה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:          #0f1117;
+    --surface:     #1a1d27;
+    --surface2:    #22263a;
+    --border:      #2e3347;
+    --text:        #e8eaf0;
+    --muted:       #6b7280;
+    --accent:      #c084fc;
+
+    /* Course colors */
+    --c1:  #4ade80; /* מבוא למקאם / אנסמבל מקאם */
+    --c2:  #60a5fa; /* אולפן דיגיטלי / אולפן */
+    --c3:  #f472b6; /* מבוא להקשבה */
+    --c4:  #fb923c; /* תורת המוזיקה */
+    --c5:  #a78bfa; /* אנסמבל מודרני ★ */
+    --c6:  #34d399; /* קומפוזיציה */
+    --c7:  #fbbf24; /* מוזיקה ומהפכה */
+    --c8:  #f87171; /* אקוסטיקה מעשית */
+    --c9:  #38bdf8; /* כתיבת שירים */
+    --c10: #e879f9; /* סינטזה */
+    --c11: #86efac; /* תרגול תאוריה */
+    --c12: #7dd3fc; /* מקהלה ★ */
+    --c13: #4ade80; /* אנסמבל מקאם ★ */
+    --c14: #d946ef; /* מועדון הקצב */
+    --c15: #fb923c; /* הרמוניה */
+    --c16: #f472b6; /* יצירתיות בחשמל */
+    --c17: #c084fc; /* טקטס ודימוי */
+    --c18: #fbbf24; /* מוסיקה ומהפכה ב׳ */
+    --c19: #38bdf8; /* אולפן מתקדם */
+    --c20: #a3e635; /* Max/MSP */
+    --c21: #fb923c; /* מעבדה אנלוגית */
+    --c22: #e879f9; /* דברים מופיעים */
+    --c23: #4ade80; /* תזמור ועיבוד חדיש */
+    --c24: #60a5fa; /* קידום עצמי */
+    --c25: #fbbf24; /* אקוסטיקה */
+
+    --cancel:  #374151;
+    --pesach:  #1e293b;
+    --holiday: #3b1c1c;
+    --fest:    #1c2340;
+    --quest:   #2d2510;
+
+    --radius: 10px;
+    --font: 'Heebo', sans-serif;
+    --mono: 'Space Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px 0;
+    position: sticky; top: 0; z-index: 100;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    opacity: 0.8;
+  }
+  header h1 {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  header h1 span { color: var(--accent); }
+
+  /* ── Year tabs ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .tab {
+    padding: 10px 28px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: var(--radius) var(--radius) 0 0;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--surface2);
+  }
+
+  /* ── Main layout ── */
+  main { padding: 28px 24px 60px; max-width: 1400px; margin: 0 auto; }
+
+  /* ── Month block ── */
+  .month-block { margin-bottom: 40px; }
+  .month-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: var(--mono);
+    margin-bottom: 10px;
+    padding-right: 4px;
+  }
+
+  /* ── Calendar grid ── */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: 80px repeat(4, 1fr);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  /* Day header row */
+  .day-hdr {
+    background: var(--surface2);
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .day-hdr.day-name { color: var(--text); font-size: 13px; }
+  .week-hdr-cell {
+    background: var(--surface2);
+    padding: 10px 8px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+  }
+
+  /* Week row */
+  .week-date { font-size:10px; color:#6b7280; margin-bottom:4px; }
+  .week-label {
+    font-size: 9px;
+    color: #6b7280;
+    padding: 4px 2px;
+    line-height: 1.3;
+    padding: 14px 8px;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--muted);
+    text-align: center;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 16px;
+  }
+
+  .day-cell {
+    padding: 12px 10px;
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+    transition: background 0.15s;
+  }
+  .day-cell:hover { background: var(--surface2); }
+
+  .date-num {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  /* ── Course pill ── */
+  .course {
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    transition: transform 0.1s, opacity 0.1s;
+    cursor: default;
+  }
+  .course:hover { transform: translateY(-1px); opacity: 0.95; }
+  .course-time {
+    font-size: 9px;
+    font-family: var(--mono);
+    opacity: 0.7;
+    letter-spacing: 0.05em;
+  }
+  .course-name { font-weight: 700; font-size: 11px; }
+  .course-teacher { font-size: 9px; opacity: 0.75; }
+  .course.ensemble .course-name::before { content: "★ "; }
+
+  /* Special day states */
+  .day-cell.is-cancel {
+    background: var(--cancel);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .day-cell.is-cancel_event {
+    background: var(--cancel);
+  }
+  .is-cancel_event .special-label { color: #9ca3af; background: #1f2937; }
+  .day-cell.is-pesach {
+    background: var(--pesach);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  .day-cell.is-holiday {
+    background: var(--holiday);
+  }
+  .day-cell.is-festival {
+    background: var(--fest);
+    border: 1px solid #4a6fa5;
+  }
+  .day-cell.is-question {
+    background: var(--quest);
+  }
+
+  .special-label {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 8px;
+    border-radius: 6px;
+    text-align: center;
+    margin-top: 8px;
+  }
+  .is-cancel .special-label { color: #9ca3af; background: #1f2937; }
+  .is-pesach .special-label { color: #6b7280; background: #111827; }
+  .is-holiday .special-label { color: #fca5a5; background: #450a0a; }
+  .is-festival .special-label { color: #fde68a; background: #1e3a5f; }
+  .is-question .special-label { color: #fcd34d; background: #1c1a05; font-size: 10px; }
+  .question-icon { font-size: 10px; color: #fcd34d; margin-bottom: 4px; }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    padding: 16px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* Year panel */
+  .year-panel { display: none; }
+  .year-panel.active { display: block; }
+
+  /* Cal grid last row no bottom border */
+  .cal-grid > *:nth-last-child(-n+5) {
+    border-bottom: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .cal-grid { grid-template-columns: 50px repeat(4, 1fr); }
+    .course-teacher { display: none; }
+    main { padding: 16px 8px 40px; }
+    .course-name { font-size: 10px; }
+    .course-block { padding: 4px 5px; }
+    .date-num { font-size: 10px; }
+    .day-hdr { font-size: 11px; padding: 6px 4px; }
+    .special-label { font-size: 10px; }
+    .event-badge { font-size: 8px; padding: 1px 4px; }
+  }
+
+  @media (max-width: 480px) {
+    html, body { overflow-x: hidden; width: 100%; }
+    header { padding: 12px 12px 0; width: 100%; box-sizing: border-box; }
+    main { padding: 12px 12px 40px; box-sizing: border-box; width: 100%; }
+    .header-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+    header h1 { font-size: 18px; }
+    .logo { font-size: 11px; }
+    .radio-player { width: 100%; box-sizing: border-box; padding: 4px 8px; }
+    .radio-label { min-width: 0; flex: 1; font-size: 10px; max-width: none; }
+    .tabs { gap: 4px; flex-wrap: wrap; }
+    .tab { font-size: 12px; padding: 6px 10px; }
+    .legend { font-size: 10px; }
+    .month-title { font-size: 13px; }
+    .cal-section { width: 100%; box-sizing: border-box; }
+    .cal-grid { width: 100%; box-sizing: border-box; grid-template-columns: 40px repeat(4, 1fr); }
+    .course-name { font-size: 9px; line-height: 1.2; }
+    .course-time { font-size: 8px; }
+    .course-block { padding: 3px 4px; margin: 1px 0; border-radius: 3px; }
+    .date-num { font-size: 9px; margin-bottom: 2px; }
+    .day-hdr { font-size: 10px; padding: 5px 2px; letter-spacing: 0; }
+    .special-label { font-size: 9px; }
+  }
+
+  /* ── Radio Player ── */
+  .radio-player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 6px 14px;
+    position: relative;
+  }
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--muted);
+    min-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+  .radio-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .radio-dot.live {
+    background: #f87171;
+    animation: pulse 1.4s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .play-btn, .skip-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .skip-btn {
+    width: 38px; height: 38px;
+    font-size: 20px;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .play-btn:hover, .skip-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+  .play-btn.playing {
+    background: rgba(192,132,252,0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+
+  .skip-btn.shuffle-on {
+    background: rgba(192,132,252,0.2);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+
+  .day-cell.is-event {
+    background: #1a1f2e;
+    border: 1px solid #e879f9;
+  }
+  .is-event .special-label {
+    color: #f0abfc;
+    background: rgba(232,121,249,0.15);
+    border: 1px solid rgba(232,121,249,0.3);
+  }
+  .event-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    color: #e879f9;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+
+  .evening-banner {
+    margin-top: auto;
+    border-radius: 6px;
+    padding: 5px 8px;
+    background: rgba(232,121,249,0.12);
+    border: 1px solid rgba(232,121,249,0.35);
+    font-size: 10px;
+    color: #f0abfc;
+    font-family: var(--mono);
+    letter-spacing: 0.03em;
+  }
+  .evening-banner::before { content: "🌙 "; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="logo">MUSRARA // NEW MUSIC</div>
+    <h1>מערכת שיעורים <span>סמסטר ב׳</span> תשפ״ו</h1>
+    <div class="radio-player" id="radioPlayer">
+      <div class="radio-label">
+        <img src="https://static.wixstatic.com/media/4eb42d_30d05fd8b345403a9a69707c21dbb29d~mv2.png/v1/fill/w_78,h_130,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/noun-radio-tower-1504713.png" style="height:24px;width:auto;opacity:0.8;margin-left:6px" />
+        <span class="radio-dot" id="radioDot"></span>
+        <span id="radioStatus">Radio Musrara</span>
+      </div>
+      <iframe id="scWidget"
+        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/radiomusrara&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false&color=%23c084fc"
+        width="200" height="60" frameborder="0" scrolling="no" allow="autoplay"
+        style="position:fixed;bottom:-100px;left:-300px;z-index:-1">
+      </iframe>
+      <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+      <button class="skip-btn" id="shuffleBtn" onclick="toggleShuffle()" title="shuffle">⇄</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showYear(1,this)">שנה א׳</button>
+    <button class="tab" onclick="showYear(2,this)">שנה ב׳</button>
+    <button class="tab" onclick="showYear(3,this)">שנה ג׳</button>
+    <button class="tab" onclick="showYear(4,this)">תכנית מחקר</button>
+  </div>
+</header>
+
+<main>
+  <div id="year1" class="year-panel active"></div>
+  <div id="year2" class="year-panel"></div>
+  <div id="year3" class="year-panel"></div>
+  <div id="year4" class="year-panel"></div>
+</main>
+
+<script>
+// ── Data ────────────────────────────────────────────────────────────
+const MONTH_NAMES = { 5:'מאי 2026', 6:'יוני 2026', 7:'יולי 2026' };
+const DAY_NAMES   = ['ב׳','ג׳','ד׳','ה׳'];
+
+// Course registry: id -> { name, teacher, color, ensemble }
+const COURSES = {
+  // Year 1
+  makam_intro:   { n:'מבוא למקאם',       t:'יוהנה ריטמולר',         c:'#4ade80', e:false },
+  olpan_dig:     { n:'אולפן דיגיטלי',    t:'יוגב פריליכמן',         c:'#60a5fa', e:false },
+  hakshavet:     { n:'מבוא להקשבה',      t:'ניב גפני / מעיין צדקה', c:'#f472b6', e:false },
+  teoria_a:      { n:'תורת המוזיקה א׳',  t:'תום קליין',             c:'#fb923c', e:false },
+  ens_mod:       { n:'אנסמבל מודרני',    t:'דן ויינשטיין',          c:'#a78bfa', e:true  },
+  comp_kiki:     { n:'קומפוזיציה',       t:'קיקי קרן הוס',          c:'#34d399', e:false },
+  muz_mahap_a:   { n:'מוזיקה ומהפכה',    t:'ערן זקס',               c:'#fbbf24', e:false },
+  akustika_x2:   { n:'אקוסטיקה מעשית – שיעור כפול הגשות', t:'אילן גרין', c:'#f87171', e:false },
+  akustika:      { n:'אקוסטיקה מעשית',   t:'אילן גרין',             c:'#f87171', e:false },
+  shirim:        { n:'כתיבת שירים',      t:'מוטי רודן',             c:'#38bdf8', e:false },
+  sinteza:       { n:'סינטזה',           t:'יוגב פריליכמן',         c:'#e879f9', e:false },
+  targ_teoria_a: { n:'תרגול תאוריה א׳',  t:'',                      c:'#86efac', e:false },
+  olpan_a:       { n:'אולפן א׳',         t:'אבי אלבז',              c:'#7dd3fc', e:false },
+  // Year 2
+  mudon_kzev:    { n:'מועדון הקצב',      t:'יוגב פריליכמן',         c:'#d946ef', e:false },
+  mahala:        { n:'מקהלה',            t:'לילה מזל יינשן',        c:'#4ade80', e:true  },
+  ens_makam:     { n:'אנסמבל מקאם',      t:'יוהנה ריטמולר',         c:'#4ade80', e:true  },
+  harmonia:      { n:'הרמוניה',          t:'אור סיני',              c:'#fb923c', e:false },
+  comp_or:       { n:'קומפוזיציה',       t:'אור סיני',              c:'#34d399', e:false },
+  ytzir_hashmal: { n:'יצירתיות בחשמל',   t:'ערן זקס',               c:'#f472b6', e:false },
+  taxt_dimuy:    { n:'טקטס ודימוי',      t:'דניאל קיצ׳לס',          c:'#c084fc', e:false },
+  muz_mahap_b:   { n:'מוסיקה ומהפכה ב׳', t:'ערן זקס',               c:'#fbbf24', e:false },
+  olpan_adv:     { n:'אולפן מתקדם',      t:'אבי אלבז',              c:'#38bdf8', e:false },
+  targ_teoria_b: { n:'תרגול תאוריה ב׳',  t:'',                      c:'#86efac', e:false },
+  feedback_y3:   { n:'פידבק הגשות – שנה ג׳', t:'',                    c:'#f472b6', e:false },
+  // Year 3
+  ens_electro:   { n:'אנסמבל אלקטרו-אקוסטי', t:'שמיל פרנקל',        c:'#f87171', e:true  },
+  hagasha:       { n:'הגשה סופית',              t:'',                     c:'#f87171', e:false },
+  olpan_dig_long: { n:'אולפן דיגיטלי',          t:'יוגב פריליכמן',         c:'#60a5fa', e:false },
+  targ_machshev:  { n:'תרגול מחשבי מוזיקה',     t:'',                     c:'#67e8f9', e:false },
+  hakshavet_hagasha: { n:'מבוא להקשבה – הגשה סופית', t:'ניב גפני / מעיין צדקה', c:'#f472b6', e:false },
+  sikum:         { n:'מפגש סיכום',              t:'',                     c:'#94a3b8', e:true  },
+  sinteza_bonus:  { n:'סינטזה – בונוס',          t:'יוגב פריליכמן',         c:'#e879f9', e:false },
+  sinteza_personal: { n:'סינטזה – פגישות אישיות',  t:'יוגב פריליכמן',         c:'#e879f9', e:false },
+  olpan_dig_personal: { n:'אולפן דיגיטלי – פגישות אישיות', t:'יוגב פריליכמן',   c:'#60a5fa', e:false },
+  max_msp_x2:    { n:'Max/MSP ✕2',             t:'אמיר בולצמן',           c:'#a3e635', e:false },
+  maabada_x2_long: { n:'מעבדה אנלוגית | שיעור כפול', t:'עמר גולדברג', c:'#fb923c', e:false },
+  maabada_x2:    { n:'מעבדה אנלוגית ✕2',       t:'עמר גולדברג',           c:'#fb923c', e:false },
+  taxt_x2:       { n:'טקטס ודימוי ✕2',         t:"דניאל קיצ'לס",          c:'#c084fc', e:false },
+  maabada_kol:   { n:'מעבדה קולית',          t:'מנחות מתחלפות',        c:'#6ee7b7', e:false },
+  maabada_kli:   { n:'מעבדה כלית',           t:'מעיין צדקה',           c:'#a5f3fc', e:false },
+  tizmor:        { n:'תזמור ועיבוד חדיש',t:'דן ויינשטיין',          c:'#4ade80', e:false },
+  max_msp_hagasha: { n:'Max/MSP – הגשות',   t:'שמיל פרנקל',         c:'#60a5fa', e:false },
+  max_msp:       { n:'Max/MSP',          t:'אמיר בולצמן',           c:'#a3e635', e:false },
+  dvarim:        { n:'פרויקט גמר – דברים מופיעים', t:'אנה ויילד',   c:'#e879f9', e:false },
+  sikum_feedback: { n:'מפגש סיכום פידבק', t:'אמיר בולצמן',           c:'#f472b6', e:false },
+  sicha_sof:     { n:'שיחה על סוף השנה', t:'אמיר בולצמן',           c:'#a78bfa', e:false },
+  maabada_dig:   { n:'מעבדה דיגיטלית',  t:'אמיר בולצמן',           c:'#ff6ec7', e:false },
+  maabada:       { n:'מעבדה אנלוגית',    t:'עמר גולדברג',           c:'#fb923c', e:false },
+  olpan_g:       { n:'אולפן',            t:'אבי אלבז',              c:'#60a5fa', e:false },
+  max_msp_hashla:  { n:'Max/MSP – השלמה',         t:'אמיר בולצמן',           c:'#a3e635', e:false },
+  planetarium_asaf: { n:'פלנטריום – מפגש עם אסף שתיל', t:'',             c:'#818cf8', e:false },
+  planetarium_work: { n:'פלנטריום – זמן עבודה',  t:'',                     c:'#818cf8', e:false },
+  olpan_dig_adv_long: { n:'אולפן דיגיטלי (מתקדמים)', t:'יפעת זיו',         c:'#60a5fa', e:false },
+  olpan_dig_adv:  { n:'אולפן דיגיטלי (מתקדמים)', t:'יפעת זיו',         c:'#60a5fa', e:false },
+  planetarium:    { n:'פלנטריום – מפגשים',       t:'',                     c:'#818cf8', e:false },
+  mahala_gen:      { n:'מקהלה – גנרל ★',         t:'לילה מזל יינשן',        c:'#4ade80', e:true  },
+  ens_mod_q:       { n:'אנסמבל מודרני ?',        t:'שלמה גרוניך',           c:'#a78bfa', e:true  },
+  ens_electro_q:   { n:'אנסמבל אלקטרו-אקוסטי ?', t:'בלז',                  c:'#34d399', e:true  },
+  ens_makam_q:     { n:'אנסמבל מקאם ?',          t:'מוחמד נסאר',            c:'#fbbf24', e:true  },
+  mahala_q:        { n:'מקהלה ?',               t:'לילה מזל יינשן',        c:'#4ade80', e:true  },
+  musixa_mix_pres: { n:'מצגת מוסררה מיקס',        t:'',                     c:'#fbbf24', e:false },
+  dvarim_hagasha_q: { n:'דברים מופיעים – הגשות ?', t:'אנה ויילד',          c:'#e879f9', e:false },
+  dvarim_x2:      { n:'דברים מופיעים – שיעור כפול', t:'אנה ויילד',       c:'#e879f9', e:false },
+  dvarim_hagasha: { n:'דברים מופיעים – הגשות', t:'אנה ויילד',           c:'#e879f9', e:false },
+  sikat_a: { n:'שיחת סיכום שנה א׳',      t:'',                     c:'#94a3b8', e:false },
+  sikat_b: { n:'שיחת סיכום שנה ב׳',      t:'',                     c:'#94a3b8', e:false },
+  olpan_g_personal: { n:'אולפן – פגישות אישיות', t:'אבי אלבז',         c:'#60a5fa', e:false },
+  muz_mahap_hagasha: { n:'מוסיקה ומהפכה ב׳ – הגשות', t:'ערן זקס',           c:'#fbbf24', e:false },
+  muz_mahap_b_x2: { n:'מוסיקה ומהפכה ב׳ – שיעור כפול', t:'ערן זקס',        c:'#fbbf24', e:false },
+  kiddum_guest:   { n:'קידום עצמי – מרצה אורח',  t:'ערן זקס',              c:'#34d399', e:false },
+  kiddum_hagasha: { n:'קידום עצמי – הגשות טקסט', t:'ערן זקס',             c:'#34d399', e:false },
+  kiddum:        { n:'קידום עצמי',       t:'ערן זקס',               c:'#34d399', e:false },
+};
+
+// Weekly schedule per year: { weekday(0=Mon..3=Thu): [[time, courseId]] }
+const SCHED = {
+  1: {
+    0: [['10:00–12:30','makam_intro'],['13:00–15:30','olpan_dig'],['16:00–18:30','hakshavet']],
+    1: [['10:00–12:30','teoria_a'],['13:00–15:30','ens_mod'],['13:00–15:30','targ_machshev'],['16:00–18:30','comp_kiki']],
+    2: [['10:00–12:30','muz_mahap_a'],['13:00–15:30','akustika'],['16:00–18:30','shirim']],
+    3: [['10:00–12:30','sinteza'],['13:00–15:30','targ_teoria_a'],['16:00–18:30','olpan_a']],
+  },
+  2: {
+    0: [['10:00–12:30','mudon_kzev'],['13:00–15:30','mahala'],['13:00–15:30','ens_makam']],
+    1: [['10:00–13:15','harmonia'],['13:00–15:30','ens_mod'],['16:00–18:30','comp_or']],
+    2: [['10:00–12:30','ens_electro'],['13:00–15:30','ytzir_hashmal'],['16:00–18:30','taxt_dimuy'],['16:00–18:30','maabada']],
+    3: [['10:00–12:30','muz_mahap_b'],['13:00–15:30','olpan_adv'],['16:00–17:00','targ_teoria_b']],
+  },
+  3: {
+    0: [['13:00–15:30','mahala'],['13:00–15:30','ens_makam']],
+    1: [['10:00–12:30','tizmor'],['13:00–15:30','ens_mod']],
+    2: [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp'],['13:00–15:30','dvarim'],['16:00–18:30','maabada']],
+    3: [['10:00–12:30','olpan_g_personal'],['13:00–15:30','kiddum']],
+  },
+  4: {
+    0: [['13:00–15:30','mahala'],['13:00–15:30','ens_makam'],['13:00–15:30','maabada_dig'],['16:00–17:30','olpan_dig_adv']],
+    1: [],
+    2: [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp'],['16:00–18:30','maabada']],
+    3: [['10:00–12:30','muz_mahap_b'],['13:00–15:30','olpan_adv']],
+  },
+};
+
+// Special days: 'YYYY-M-D' -> { type, label }
+// Date-specific course overrides: 'YYYY-M-D-wd' -> [[time, courseId], ...]
+const DATE_COURSES = {
+  // ── שנה א׳ ──────────────────────────────────────────────
+  // סינטזה ב-29/6 - אירוע סיום משותף עם אולפן דיגיטלי
+  'Y1-2026-6-29-1': [['10:00–12:30','makam_intro'],['13:00–15:30','olpan_dig'],['16:00–18:30','hakshavet'],['16:00–18:30','sinteza']],
+
+  // ── שנה ב׳ ──────────────────────────────────────────────
+  // מקהלה + אנסמבל מקאם - נגמרים 8/6
+  // מעבדה אנלוגית - נגמרת 22/6
+  // אולפן דיגיטלי מתקדמים - נגמר 8/6
+
+  // ── שנה ג׳ ──────────────────────────────────────────────
+  // קידום עצמי - נגמר 18/6
+  // תזמור ועיבוד - נגמר 16/6
+
+  // max_msp הגשות סופיות 24/6 (ד׳)
+  'Y2-2026-6-24-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp_hagasha'],['13:00–15:30','ytzir_hashmal'],['16:00–18:30','taxt_dimuy']],
+  'Y3-2026-6-24-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp_hagasha'],['13:00–15:30','dvarim']],
+  'Y4-2026-6-24-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp']],
+
+  'Y2-2026-5-11-0': [['10:00–12:30','mudon_kzev'],['13:00–15:30','mahala'],['13:00–15:30','ens_makam'],['15:45–16:30','sicha_sof']],
+  'Y3-2026-5-13-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp'],['13:00–15:30','sikum_feedback'],['16:00–18:30','maabada']],
+  'Y1-2026-5-27-2': [['10:00–12:30','muz_mahap_a'],['13:00–15:30','akustika'],['16:00–17:30','sicha_sof']],
+  'Y2-2026-6-3-2': [['10:00–12:30','ens_electro'],['13:00–15:30','ytzir_hashmal'],['16:00–20:00','maabada_x2_long']],
+  'Y3-2026-6-3-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp'],['13:00–15:30','dvarim'],['16:00–20:00','maabada_x2_long']],
+  'Y4-2026-6-3-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp'],['16:00–20:00','maabada_x2_long']],
+  'Y2-2026-6-10-2': [['10:00–12:30','ens_electro'],['13:00–15:30','ytzir_hashmal'],['16:00–20:00','maabada_x2_long']],
+  'Y3-2026-6-10-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp'],['13:00–15:30','dvarim'],['16:00–20:00','maabada_x2_long']],
+  'Y4-2026-6-10-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp'],['16:00–20:00','maabada_x2_long']],
+  'Y2-2026-6-17-2': [['10:00–12:30','ens_electro'],['13:00–15:30','ytzir_hashmal'],['16:00–20:00','maabada_x2_long']],
+  'Y3-2026-6-17-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp'],['13:00–15:30','dvarim'],['16:00–20:00','maabada_x2_long']],
+  'Y4-2026-6-17-2': [['10:00–12:30','ens_electro'],['10:00–12:30','max_msp'],['16:00–20:00','maabada_x2_long']],
+  // שנה ג׳ פידבק הגשות – 3/5 א׳, 6/5 ד׳, 7/5 ה׳
+  'Y3-2026-5-3-sun': [['14:00–18:00','feedback_y3']],
+  'Y3-2026-5-6-2':   [['10:15–14:10','feedback_y3'],['16:00–18:30','maabada']],
+  'Y3-2026-5-7-3':   [['10:00–12:30','olpan_g_personal'],['13:00–16:30','feedback_y3']],
+
+  // שנה א׳ תיקונים סוף יוני
+  'Y1-2026-6-23-1': [['10:00–12:30','teoria_a'],['13:00–15:30','ens_mod'],['13:00–15:30','targ_machshev'],['16:00–18:30','shirim']],
+  'Y1-2026-6-24-2': [['10:00–12:30','muz_mahap_a'],['13:00–18:30','akustika_x2']],
+  // ── יולי - תערוכת בוגרים ────────────────────────────────
+};
+
+// Cutoff dates per weekday (after 12 sessions)
+const WD_CUTOFFS = {};  // cutoffs handled per-course in DATE_COURSES
+
+const SPECIAL = {};
+function addRange(from, to, type, label) {
+  function parseDate(s) {
+    const parts = s.split('-');
+    return new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  }
+  let d = parseDate(from);
+  const end = parseDate(to);
+  while(d <= end) {
+    const k = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    SPECIAL[k] = { type, label };
+    d.setDate(d.getDate()+1);
+  }
+}
+addRange('2026-5-19','2026-5-19',   'evening', 'בכורות – אנסמבל מודרני + נובה X מוסררה | 19:00');
+addRange('2026-5-21','2026-5-21',   'holiday', 'שבועות');
+addRange('2026-5-24','2026-5-25',   'evening', 'קוסמוס – תכנית למחקר אמנותי | מזקקה');
+addRange('2026-6-3','2026-6-3',     'evening', 'הופעת מקהלה במפעל');
+addRange('2026-6-4','2026-6-4',     'evening', 'ו׳ 5/6 – הופעת אנסמבל מקאם במפעל');
+addRange('2026-6-29','2026-6-29',   'evening', 'אולפן דיגיטלי + סינטזה – אירוע סיום | מזקקה');
+addRange('2026-6-30','2026-6-30',   'event',   'שנה ב׳ – הגשות מסכמות | 10:00–18:00');
+addRange('2026-7-2','2026-7-2',     'event',   'אנסמבל אלקטרו-אקוסטי – מופע + יצירות אלקטרוניות חדשות');
+addRange('2026-7-16','2026-7-16',   'event',   'פתיחת תערוכת בוגרים');
+addRange('2026-7-19','2026-7-21',   'event',   'אירועי Output');
+// ── Helpers ─────────────────────────────────────────────────────────
+function getMondays(year, month) {
+  // Returns all Mondays in the given month that fall in Mar-Jun 2026
+  // We need Mon Mar 2 through Mon Jun 29
+  const start = new Date(2026, 4, 4); // May 4 (Monday)
+  const end   = new Date(2026, 6, 13); // July 13 (week containing Jul 16)
+  const mondays = [];
+  let d = new Date(start);
+  while(d <= end) {
+    if(d.getMonth()+1 === month) mondays.push(new Date(d));
+    d.setDate(d.getDate()+7);
+  }
+  return mondays;
+}
+
+function allMondays() {
+  const start = new Date(2026, 4, 4);
+  const end   = new Date(2026, 6, 20);
+  const list  = [];
+  let d = new Date(start);
+  while(d <= end) { list.push(new Date(d)); d.setDate(d.getDate()+7); }
+  return list;
+}
+
+function dayKey(d) { return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
+
+function fmt(d) { return `${d.getDate()}/${d.getMonth()+1}`; }
+
+function hexToRgba(hex, a) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+// ── Render ───────────────────────────────────────────────────────────
+function renderYear(yearNum) {
+  const el = document.getElementById(`year${yearNum}`);
+  el.innerHTML = '';
+
+
+
+  // By month
+  [5,6,7].forEach(month => {
+    // Each week belongs to its Monday's month only
+    const filtered = allMondays().filter(mon => mon.getMonth()+1 === month);
+
+
+    if(!filtered.length) return;
+
+    const block = document.createElement('div');
+    block.className = 'month-block';
+    block.innerHTML = `<div class="month-label">${MONTH_NAMES[month]}</div>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'cal-grid';
+
+    // Header row
+    grid.innerHTML = `<div class="day-hdr day-name" style="font-size:10px;opacity:0.6">א׳</div>` +
+      DAY_NAMES.map(d=>`<div class="day-hdr day-name">${d}</div>`).join('');
+
+    filtered.forEach(monday => {
+
+
+      // Sunday cell first (rightmost in RTL)
+      {
+        const sun2 = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() - 1);
+        const sunKey2 = `${sun2.getFullYear()}-${sun2.getMonth()+1}-${sun2.getDate()}`;
+        const sp2 = SPECIAL[sunKey2];
+        let sh = `<div class="date-num" style="font-size:9px">${fmt(sun2)}</div>`;
+        const sk = `Y${yearNum}-${sunKey2}-sun`;
+        if(sp2 && ['pesach','cancel','holiday','cancel_event'].includes(sp2.type)) {
+          sh += `<div style="color:#6b7280;font-size:8px;margin-top:2px">✕</div>`;
+        } else if(sp2 && sp2.type==='evening') {
+          sh += `<div style="background:rgba(232,121,249,0.12);border:1px solid rgba(232,121,249,0.35);border-radius:4px;padding:3px 5px;font-size:9px;color:#f0abfc;margin-top:3px">🌙 ${sp2.label}</div>`;
+        } else if(DATE_COURSES[sk]) {
+          DATE_COURSES[sk].forEach(([time,id]) => {
+            const c = COURSES[id];
+            sh += `<div style="background:${c.c}22;border-left:2px solid ${c.c};padding:3px 4px;margin:2px 0;font-size:10px;border-radius:3px;color:${c.c};line-height:1.4">${c.n}<br><span style="opacity:0.7;font-size:9px">${time}</span></div>`;
+          });
+        }
+        let scls2 = 'day-cell';
+        if(sp2) {
+          if(sp2.type==='pesach') scls2+=' is-pesach';
+          else if(sp2.type==='cancel'||sp2.type==='cancel_event') scls2+=' is-cancel';
+          else if(sp2.type==='holiday') scls2+=' is-holiday';
+          else if(sp2.type==='event') scls2+=' is-event';
+          else if(sp2.type==='festival') scls2+=' is-festival';
+          else if(sp2.type==='genaral') scls2+=' is-genaral';
+        }
+        if(sp2 && ['event','festival','genaral'].includes(sp2.type)) {
+          sh += `<div class="special-label">${sp2.label}</div>`;
+        }
+        grid.innerHTML += `<div class="${scls2}" style="padding:4px 3px;min-height:40px">${sh}</div>`;
+      }
+      for(let wd=0; wd<4; wd++) {
+        const day = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + wd);
+        const key = dayKey(day);
+        const sp  = SPECIAL[key];
+        const dcKey = `Y${yearNum}-${dayKey(day)}-${wd}`;
+        const dcVal = DATE_COURSES[dcKey];
+        let yearLabel = null;
+        let slots;
+        if(typeof dcVal === 'string' && dcVal.startsWith('label:')) {
+          yearLabel = dcVal.slice(6);
+          slots = [];
+        } else {
+          slots = dcVal !== undefined ? dcVal : (SCHED[yearNum][wd] || []);
+        }
+
+        let cls = 'day-cell';
+        if(sp && sp.type !== 'evening') cls += ' is-'+sp.type;
+
+        let html = `<div class="date-num">${fmt(day)}</div>`;
+        if(yearLabel) { html += `<span class="event-badge">אירוע</span><div class="special-label">🎶 ${yearLabel}</div>`; cls += ' is-event'; }
+
+        if(sp && sp.type === 'cancel_event') {
+          html += `<div class="special-label">✕ ${sp.label}</div>`;
+          // show year-specific meetings if any
+          const dcSlots = DATE_COURSES[dcKey];
+          if(dcSlots && Array.isArray(dcSlots)) {
+            dcSlots.forEach(([time, id]) => {
+              const c = COURSES[id];
+              html += courseHTML(time, c, 1);
+            });
+          }
+        } else if(sp && sp.type === 'evening') {
+          // Evening event: show regular courses + event banner at bottom
+          const ensAfterCutoff = new Date(2026,5,8);
+          const ensIds = ['mahala','ens_makam','ens_mod'];
+          const wdCutoffEve = WD_CUTOFFS[wd];
+          if(!(wdCutoffEve && day > wdCutoffEve)) {
+            slots.forEach(([time, id]) => {
+              if(yearNum===3 && id==='dvarim' && day > new Date(2026,4,13)) return;
+              if(ensIds.includes(id) && day > ensAfterCutoff) return;
+              if(id==='hakshavet' && day < new Date(2026,3,13)) return;
+              if(id==='targ_machshev' && day > new Date(2026,5,16)) return;
+              if(id==='mudon_kzev' && day > new Date(2026,5,8)) return;
+              // Per-course cutoffs
+              const cutoffs = {
+                // Y1
+                makam_intro:   [1, new Date(2026,5,22)],
+                hakshavet:     [1, new Date(2026,5,22)],
+                olpan_dig:     [0, new Date(2026,5,22)],
+                sinteza:       [3, new Date(2026,5,25)],
+                targ_machshev: [1, new Date(2026,5,22)],
+                ens_mod:       [1, new Date(2026,5,16)],
+                comp_kiki:     [1, new Date(2026,5,16)],
+                teoria_a:      [2, new Date(2026,5,23)],
+                targ_teoria_a: [3, new Date(2026,5,18)],
+                olpan_a:       [3, new Date(2026,5,25)],
+                muz_mahap_a:   [3, new Date(2026,5,24)],
+                akustika:      [3, new Date(2026,5,24)],
+                shirim:        [3, new Date(2026,6,1)],
+                // Y2+Y4
+                mudon_kzev:    [1, new Date(2026,6,29)],
+                mahala:        [1, new Date(2026,5,8)],
+                ens_makam:     [1, new Date(2026,5,8)],
+                maabada:       [2, new Date(2026,5,17)],
+                maabada_dig:   [0, new Date(2026,4,18)],
+                maabada_dig:   [0, new Date(2026,4,18)],
+                olpan_dig_adv: [0, new Date(2026,5,8)],
+                olpan_dig_adv_long: [0, new Date(2026,5,8)],
+                harmonia:      [2, new Date(2026,5,16)],
+                comp_or:       [2, new Date(2026,5,16)],
+                targ_teoria_b: [3, new Date(2026,5,18)],
+                muz_mahap_b:   [3, new Date(2026,5,25)],
+                olpan_adv:     [3, new Date(2026,5,25)],
+                ens_electro:   [2, new Date(2026,5,24)],
+                max_msp:       [2, new Date(2026,4,27)],  // שיעור אחרון 27/5
+                ytzir_hashmal: [3, new Date(2026,5,24)],
+                taxt_dimuy:    [3, new Date(2026,5,24)],
+                // Y3
+                tizmor:        [2, new Date(2026,5,16)],
+                dvarim:        [3, new Date(2026,5,24)],
+                kiddum:        [3, new Date(2026,5,18)],
+                olpan_g_personal: [3, new Date(2026,5,25)],
+                olpan_g:       [3, new Date(2026,5,25)],
+              };
+              if(cutoffs[id] && day > cutoffs[id][1]) return;
+              const c = COURSES[id];
+              html += courseHTML(time, c, 1);
+            });
+          }
+          html += `<div class="evening-banner">${sp.label}</div>`;
+        } else if(sp && sp.type === 'event') {
+          html += `<span class="event-badge">אירוע מחלקה</span>`;
+          html += `<div class="special-label">🎶 ${sp.label}</div>`;
+        } else if(sp && sp.type === 'pesach') {
+          html += `<div class="special-label">✕ ${sp.label}</div>`;
+          const dcPesach = DATE_COURSES[dcKey];
+          if(dcPesach && Array.isArray(dcPesach)) {
+            dcPesach.forEach(([time, id]) => {
+              const c = COURSES[id];
+              html += courseHTML(time, c, 1);
+            });
+          }
+        } else if(sp && sp.type !== 'question') {
+          const icon = sp.type==='festival' ? '🎵' : sp.type==='genaral' ? '★' : sp.type==='holiday' ? '🕯' : '✕';
+          html += `<div class="special-label">${icon} ${sp.label}</div>`;
+        } else if(sp && sp.type==='question') {
+          html += `<div class="question-icon">⚠ ${sp.label}</div>`;
+          slots.forEach(([time, id]) => {
+            const c = COURSES[id];
+            html += courseHTML(time, c, 0.55);
+          });
+        } else {
+          const ensIds2 = ['mahala','ens_makam','ens_mod'];
+          const ensCutoff = new Date(2026,5,8);
+          const wdCutoff = WD_CUTOFFS[wd];
+          if(wdCutoff && day > wdCutoff) {
+            // past 12 sessions or July - no courses
+          } else {
+            const fromDC = dcVal !== undefined;
+            slots.forEach(([time, id]) => {
+              if(fromDC) { const c = COURSES[id]; if(c) html += courseHTML(time, c, 1); return; }
+              if(yearNum===3 && id==='dvarim' && day > new Date(2026,4,13)) return;
+              if(ensIds2.includes(id) && day > ensCutoff) return;
+              if(id==='hakshavet' && day < new Date(2026,3,13)) return;
+              if(id==='planetarium' && day > new Date(2026,3,29)) return;
+              if(id==='planetarium' && wd !== 3) return;
+              if(id==='targ_machshev' && day > new Date(2026,5,16)) return;
+              if(id==='mudon_kzev' && day > new Date(2026,5,8)) return;
+              // Per-course cutoffs
+              const cutoffs = {
+                // Y1
+                makam_intro:   [1, new Date(2026,5,22)],
+                hakshavet:     [1, new Date(2026,5,22)],
+                olpan_dig:     [0, new Date(2026,5,22)],
+                sinteza:       [3, new Date(2026,5,25)],
+                targ_machshev: [1, new Date(2026,5,22)],
+                ens_mod:       [1, new Date(2026,5,16)],
+                comp_kiki:     [1, new Date(2026,5,16)],
+                teoria_a:      [2, new Date(2026,5,23)],
+                targ_teoria_a: [3, new Date(2026,5,18)],
+                olpan_a:       [3, new Date(2026,5,25)],
+                muz_mahap_a:   [3, new Date(2026,5,24)],
+                akustika:      [3, new Date(2026,5,24)],
+                shirim:        [3, new Date(2026,6,1)],
+                // Y2+Y4
+                mudon_kzev:    [1, new Date(2026,6,29)],
+                mahala:        [1, new Date(2026,5,8)],
+                ens_makam:     [1, new Date(2026,5,8)],
+                maabada:       [2, new Date(2026,5,17)],
+                maabada_dig:   [0, new Date(2026,4,18)],
+                maabada_dig:   [0, new Date(2026,4,18)],
+                olpan_dig_adv: [0, new Date(2026,5,8)],
+                olpan_dig_adv_long: [0, new Date(2026,5,8)],
+                harmonia:      [2, new Date(2026,5,16)],
+                comp_or:       [2, new Date(2026,5,16)],
+                targ_teoria_b: [3, new Date(2026,5,18)],
+                muz_mahap_b:   [3, new Date(2026,5,25)],
+                olpan_adv:     [3, new Date(2026,5,25)],
+                ens_electro:   [2, new Date(2026,5,24)],
+                max_msp:       [2, new Date(2026,4,27)],  // שיעור אחרון 27/5
+                ytzir_hashmal: [3, new Date(2026,5,24)],
+                taxt_dimuy:    [3, new Date(2026,5,24)],
+                // Y3
+                tizmor:        [2, new Date(2026,5,16)],
+                dvarim:        [3, new Date(2026,5,24)],
+                kiddum:        [3, new Date(2026,5,18)],
+                olpan_g_personal: [3, new Date(2026,5,25)],
+                olpan_g:       [3, new Date(2026,5,25)],
+              };
+              if(cutoffs[id] && day > cutoffs[id][1]) return;
+              const c = COURSES[id];
+              html += courseHTML(time, c, 1);
+            });
+          }
+        }
+
+        grid.innerHTML += `<div class="${cls}">${html}</div>`;
+      }
+    });
+
+    block.appendChild(grid);
+
+    el.appendChild(block);
+  });
+}
+
+function courseHTML(time, c, opacity) {
+  const bg  = hexToRgba(c.c, 0.12 * opacity);
+  const brd = hexToRgba(c.c, 0.35 * opacity);
+  const txt = opacity < 1 ? `rgba(255,255,255,${0.4})` : c.c;
+  const ecls = c.e ? ' ensemble' : '';
+  return `<div class="course${ecls}" style="background:${bg};border:1px solid ${brd}">
+    <span class="course-time">${time}</span>
+    <span class="course-name" style="color:${txt}">${c.n}</span>
+    ${c.t ? `<span class="course-teacher">${c.t}</span>` : ''}
+  </div>`;
+}
+
+// ── Tab switching ─────────────────────────────────────────────────────
+function showYear(n, btn) {
+  document.querySelectorAll('.year-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`year${n}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────
+[1,2,3,4].forEach(renderYear);
+</script>
+
+<script>
+(function() {
+  let widget, isPlaying = false, ready = false;
+
+  function setStatus(txt) {
+    document.getElementById('radioStatus').textContent = txt;
+  }
+  function setPlaying(v) {
+    isPlaying = v;
+    const btn = document.getElementById('playBtn');
+    const dot = document.getElementById('radioDot');
+    btn.textContent = v ? '⏸' : '▶';
+    v ? btn.classList.add('playing') : btn.classList.remove('playing');
+    v ? dot.classList.add('live')    : dot.classList.remove('live');
+  }
+
+  function updateTitle() {
+    widget.getCurrentSound(function(sound) {
+      if (sound && sound.title) {
+        const t = sound.title;
+        setStatus(t.length > 24 ? t.slice(0,24)+'…' : t);
+      }
+    });
+  }
+
+  function initPlayer() {
+    const iframe = document.getElementById('scWidget');
+    widget = SC.Widget(iframe);
+
+    widget.bind(SC.Widget.Events.READY, function() {
+      ready = true;
+      // Skip to a random position in the playlist
+      widget.getSounds(function(sounds) {
+        if (sounds && sounds.length > 0) {
+          const idx = Math.floor(Math.random() * sounds.length);
+          widget.skip(idx);
+        }
+        widget.play();
+      });
+    });
+
+    widget.bind(SC.Widget.Events.PLAY, function() {
+      setPlaying(true);
+      updateTitle();
+    });
+
+    widget.bind(SC.Widget.Events.PAUSE, function() {
+      setPlaying(false);
+    });
+
+    widget.bind(SC.Widget.Events.FINISH, function() {
+      if (shuffleOn) { window.skipTrack(); } else { widget.next(); }
+    });
+  }
+
+  let shuffleOn = false;
+
+  window.togglePlay = function() {
+    if (!ready) return;
+    isPlaying ? widget.pause() : widget.play();
+  };
+
+  window.toggleShuffle = function() {
+    shuffleOn = !shuffleOn;
+    const btn = document.getElementById('shuffleBtn');
+    if (shuffleOn) {
+      btn.classList.add('shuffle-on');
+      btn.title = 'shuffle פעיל';
+      // jump to random track immediately
+      widget.getSounds(function(sounds) {
+        if (sounds && sounds.length > 0) {
+          const idx = Math.floor(Math.random() * sounds.length);
+          widget.skip(idx);
+          setTimeout(function() { widget.play(); }, 200);
+        }
+      });
+    } else {
+      btn.classList.remove('shuffle-on');
+      btn.title = 'shuffle כבוי';
+    }
+  };
+
+  window.skipTrack = function() {
+    if (!ready) return;
+    widget.getSounds(function(sounds) {
+      if (sounds && sounds.length > 0) {
+        const idx = Math.floor(Math.random() * sounds.length);
+        widget.skip(idx);
+        setTimeout(function() { widget.play(); }, 200);
+      }
+    });
+  };
+
+  window.addEventListener('load', function() {
+    const s = document.createElement('script');
+    s.src = 'https://w.soundcloud.com/player/api.js';
+    s.onload = initPlayer;
+    s.onerror = function() { setStatus('Radio Musrara'); };
+    document.head.appendChild(s);
+  });
+})();
+</script>
+
+
+
+</body>
+</html>
